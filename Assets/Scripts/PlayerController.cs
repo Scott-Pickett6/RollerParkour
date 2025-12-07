@@ -15,8 +15,13 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+
+    }
+
+    private void Awake()
+    {
         speed = 15f;
-        jumpForce = 4f;
+        jumpForce = 3.5f;
         rb = GetComponent<Rigidbody>();
         isGrounded = true;
         horizontalInput = 0;
@@ -24,7 +29,6 @@ public class PlayerController : MonoBehaviour
         jumpInput = 0;
     }
 
-    
     void Update()
     {
        horizontalInput  = Input.GetAxis("Horizontal");
