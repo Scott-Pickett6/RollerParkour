@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float speed;
+    private float maxSpeed;
+    private float acceleration;
     private float jumpForce;
     private Rigidbody rb;
     private bool isGrounded;
-    private float horizontalInput;
-    private float verticalInput;
+    private float sideInput;
+    private float forwardInput;
     private float jumpInput;
 
 
@@ -20,19 +21,20 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        speed = 15f;
+        acceleration = 25f;
+        maxSpeed = 8f;
         jumpForce = 3.5f;
         rb = GetComponent<Rigidbody>();
         isGrounded = true;
-        horizontalInput = 0;
-        verticalInput = 0;
+        sideInput = 0;
+        forwardInput = 0;
         jumpInput = 0;
     }
 
     void Update()
     {
-       horizontalInput  = Input.GetAxis("Horizontal");
-       verticalInput  = Input.GetAxis("Vertical");
+       sideInput  = Input.GetAxis("Side");
+       forwardInput  = Input.GetAxis("Forward");
        jumpInput  = Input.GetAxis("Jump");
     }
 
@@ -40,23 +42,46 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded)
         {
-            rb.AddForce(Vector3.forward * speed * verticalInput, ForceMode.Force);
-            rb.AddForce(Vector3.right * speed * horizontalInput, ForceMode.Force);
-            rb.AddForce(Vector3.up * jumpForce * jumpInput, ForceMode.Impulse);
+            Vector3 horizontalVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            float horizontalSpeed = horizontalVel.magnitude;
+
+            // accelerate if slower than max speed
+            if (horizontalSpeed < maxSpeed)
+            {
+                rb.AddForce(Vector3.forward * acceleration * forwardInput, ForceMode.Acceleration);
+                rb.AddForce(Vector3.right * acceleration * sideInput, ForceMode.Acceleration);
+            }
+            else
+            {
+                Vector3 limited = horizontalVel.normalized * maxSpeed;
+                rb.velocity = new Vector3(limited.x, rb.velocity.y, limited.z);
+            }
+
+            if(jumpInput > 0)
+            {
+                rb.AddForce(Vector3.up * jumpForce * jumpInput, ForceMode.Impulse);
+                isGrounded = false;
+            }
         }
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Platform"))
         {
-            isGrounded = true;
+            foreach(ContactPoint contact in collision.contacts)
+            {
+                if(contact.normal.y > 0.5f)
+                {
+                    isGrounded = true;
+                }
+            }
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Platform"))
         {
             isGrounded = false;
         }

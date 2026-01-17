@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour
     private GameObject rocketPrefab;
 
     [SerializeField] 
-    private GameObject groundPrefab;
+    private GameObject[] platformPrefab;
 
     [SerializeField]
     private float rocketSpawnInterval;
@@ -41,6 +41,8 @@ public class Spawner : MonoBehaviour
     {
         float randomOffsetX = Random.Range(-15f, 15f);
         Vector3 newPos = oldPos + new Vector3(randomOffsetX, 0, 16);
-        Instantiate(groundPrefab, newPos, Quaternion.identity);
+
+        int randomIndex = Random.Range(0, platformPrefab.Length);
+        Instantiate(platformPrefab[randomIndex], newPos, Quaternion.identity);
     }
 }
