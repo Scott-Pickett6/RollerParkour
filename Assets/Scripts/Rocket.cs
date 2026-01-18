@@ -9,9 +9,11 @@ public class Rocket : MonoBehaviour
     [SerializeField]
     private float speed;
 
+    private Vector3 startingPos;
+
     void Start()
     {
-
+        startingPos = transform.position;
     }
 
     private void Awake()
@@ -21,7 +23,7 @@ public class Rocket : MonoBehaviour
 
     void Update()
     {
-        if(transform.position.x < -25f || transform.position.x > 25f)
+        if (Mathf.Abs(transform.position.x - startingPos.x) > 50f)
         {
             Destroy(gameObject);
         }

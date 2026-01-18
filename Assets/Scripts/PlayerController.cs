@@ -12,12 +12,7 @@ public class PlayerController : MonoBehaviour
     private float sideInput;
     private float forwardInput;
     private float jumpInput;
-
-
-    void Start()
-    {
-
-    }
+    private bool hasMoved;
 
     private void Awake()
     {
@@ -29,13 +24,26 @@ public class PlayerController : MonoBehaviour
         sideInput = 0;
         forwardInput = 0;
         jumpInput = 0;
+        hasMoved = false;
+    }
+
+    void Start()
+    {
+        
     }
 
     void Update()
     {
-       sideInput  = Input.GetAxis("Side");
-       forwardInput  = Input.GetAxis("Forward");
-       jumpInput  = Input.GetAxis("Jump");
+        sideInput  = Input.GetAxis("Side");
+        forwardInput  = Input.GetAxis("Forward");
+        jumpInput  = Input.GetAxis("Jump");
+
+        if (!hasMoved && (sideInput != 0 || forwardInput != 0 || jumpInput != 0))
+        {
+            hasMoved = true;
+            GameManager.Instance.StartTimer();
+        }
+        GameManager.Instance.ReportPlayerDistace(Mathf.RoundToInt(transform.position.z));
     }
 
     private void FixedUpdate()
