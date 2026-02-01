@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,23 +12,46 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI distanceText;
 
-    private void OnEnable()
+    [SerializeField]
+    private TextMeshProUGUI scoreText;
+
+    [SerializeField]
+    private Button restartButton;
+
+    private void Start()
     {
-        GameManager.Instance.OnDistanceChanged += UpdateDistance;
-        GameManager.Instance.OnTimerUpdated += UpdateTimer;
-    }
-    private void OnDisable()
-    {
-        GameManager.Instance.OnDistanceChanged -= UpdateDistance;
-        GameManager.Instance.OnTimerUpdated -= UpdateTimer;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnDistanceChanged += UpdateDistance;
+            GameManager.Instance.OnTimerUpdated += UpdateTimer;
+            GameManager.Instance.OnGameOver += HandleGameOver;
+        }
     }
 
-    public void UpdateTimer(string time)
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnDistanceChanged -= UpdateDistance;
+            GameManager.Instance.OnTimerUpdated -= UpdateTimer;
+            GameManager.Instance.OnGameOver -= HandleGameOver;
+        }
+    }
+
+    private void UpdateTimer(string time)
     {
         timerText.text = "Time: " + time;
     }
-    public void UpdateDistance(int zDistance)
+
+    private void UpdateDistance(int zDistance)
     {
         distanceText.text = "Distance: " + zDistance + " m";
+    }
+
+    private void HandleGameOver(long score)
+    {
+        scoreText.gameObject.SetActive(true);
+        scoreText.text = "Final Score: " + score;
+        restartButton.gameObject.SetActive(true);
     }
 }

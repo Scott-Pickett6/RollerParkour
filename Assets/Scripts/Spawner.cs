@@ -18,12 +18,18 @@ public class Spawner : MonoBehaviour
     void Start()
     {
         InvokeRepeating("SpawnRocket", 0f, rocketSpawnInterval);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameOver += CancelRocketSpawning;
+        }   
     }
 
-    
-    void Update()
+    private void OnDestroy()
     {
-        
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnGameOver -= CancelRocketSpawning;
+        }
     }
 
     private void SpawnRocket()
@@ -34,7 +40,12 @@ public class Spawner : MonoBehaviour
         float spawnHeight = Mathf.Lerp(0.5f, 2.5f, lowBias);
 
         float zOffset = Random.Range(-1, 5);
-        Instantiate(rocketPrefab, transform.position + new Vector3(leftSide ? -16 : 16, spawnHeight, zOffset), Quaternion.Euler(0f, leftSide ? 180f : 0, 0));
+        Instantiate(rocketPrefab, transform.position + new Vector3(leftSide ? -20 : 20, spawnHeight, zOffset), Quaternion.Euler(0f, leftSide ? 180f : 0, 0));
+    }
+
+    private void CancelRocketSpawning(long score)
+    {
+        CancelInvoke("SpawnRocket");
     }
 
     public void SpawnGround(Vector3 oldPos)

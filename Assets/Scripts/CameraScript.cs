@@ -6,15 +6,6 @@ public class CameraScript : MonoBehaviour
 {
     public GameObject player;
     private Vector3 velocity = Vector3.zero;
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 
     private void LateUpdate()
     {

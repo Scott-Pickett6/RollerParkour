@@ -27,7 +27,7 @@ public class Platform : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && !hasBeenHit)
+        if (collision.gameObject.CompareTag("Player") && !hasBeenHit && GameManager.CurrentGameState != GameState.GameOver)
         {
             hasBeenHit = true;
             spawner.SpawnGround(transform.position);

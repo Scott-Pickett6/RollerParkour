@@ -27,11 +27,19 @@ public class Rocket : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if(GameManager.CurrentGameState == GameState.GameOver)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            GameManager.Instance.GameOver();
+            Destroy(gameObject);
+        }
     }
 
     private void FixedUpdate()

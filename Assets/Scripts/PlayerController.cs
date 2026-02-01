@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
         sideInput = 0;
         forwardInput = 0;
         jumpInput = 0;
-        hasMoved = false;
     }
 
     void Start()
@@ -34,16 +33,29 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        sideInput = Input.GetAxis("Side");
+        forwardInput = Input.GetAxis("Forward");
+        jumpInput = Input.GetAxis("Jump");
+
+        if (GameManager.CurrentGameState != GameState.Playing)
+        {
+            if (GameManager.CurrentGameState == GameState.Starting && (sideInput != 0 || forwardInput != 0 || jumpInput != 0))
+            {
+                GameManager.Instance.StartTimer();
+            }
+            return;
+        }
         sideInput  = Input.GetAxis("Side");
         forwardInput  = Input.GetAxis("Forward");
         jumpInput  = Input.GetAxis("Jump");
 
-        if (!hasMoved && (sideInput != 0 || forwardInput != 0 || jumpInput != 0))
-        {
-            hasMoved = true;
-            GameManager.Instance.StartTimer();
-        }
         GameManager.Instance.ReportPlayerDistace(Mathf.RoundToInt(transform.position.z));
+
+        if (transform.position.y < -10f)
+        {
+            GameManager.Instance.GameOver();
+            rb.isKinematic = true;
+        }
     }
 
     private void FixedUpdate()
