@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button restartButton;
 
+    [SerializeField]
+    private Button mainMenuButton;
+
     private void Start()
     {
         if (GameManager.Instance != null)
@@ -53,5 +56,6 @@ public class UIManager : MonoBehaviour
         scoreText.gameObject.SetActive(true);
         scoreText.text = "Final Score: " + score;
         restartButton.gameObject.SetActive(true);
+        mainMenuButton.gameObject.SetActive(true);
     }
 }

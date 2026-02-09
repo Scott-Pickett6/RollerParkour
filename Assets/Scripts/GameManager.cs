@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -64,7 +65,9 @@ public class GameManager : MonoBehaviour
         if (CurrentGameState == GameState.GameOver) return;
 
         isTimerRunning = false;
-        OnGameOver?.Invoke(CalculateScore(distanceTraveled, elapsedTime));
+        long score = CalculateScore(distanceTraveled, elapsedTime);
+        SaveBestScore(score);
+        OnGameOver?.Invoke(score);
     }
 
     public void RestartGame()
@@ -76,6 +79,16 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void LoadMainMenu()
+    {
+        CurrentGameState = GameState.Starting;
+        isTimerRunning = false;
+        elapsedTime = 0f;
+        distanceTraveled = 0;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 
     private string FormatTime(int seconds)
@@ -94,4 +107,39 @@ public class GameManager : MonoBehaviour
 
         return (long)totalScore;
     }
+
+    private void SaveBestScore(long score)
+    {
+        string path = Path.Combine(Application.persistentDataPath, "BestScore.json");
+        long bestScore = 0;
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            BestScoreData data = JsonUtility.FromJson<BestScoreData>(json);
+            bestScore = data.bestScore;
+        }
+        if (score > bestScore)
+        {
+            BestScoreData newData = new BestScoreData { bestScore = score };
+            string json = JsonUtility.ToJson(newData);
+            File.WriteAllText(path, json);
+        }
+    }
+    public long LoadBestScore()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "BestScore.json");
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            BestScoreData data = JsonUtility.FromJson<BestScoreData>(json);
+            return data != null ? data.bestScore : 0;
+        }
+        return 0;
+    }
+
+}
+
+public class BestScoreData
+{
+    public long bestScore;
 }
