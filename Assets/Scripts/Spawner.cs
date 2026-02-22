@@ -14,12 +14,15 @@ public class Spawner : MonoBehaviour
     [SerializeField]
     private float rocketSpawnInterval;
 
+    private int maxDistanceTraveled = 0;
+
 
     void Start()
     {
         InvokeRepeating("SpawnRocket", 0f, rocketSpawnInterval);
         if (GameManager.Instance != null)
         {
+            GameManager.Instance.OnDistanceChanged += AdjustSpawnInterval;
             GameManager.Instance.OnGameOver += CancelRocketSpawning;
         }   
     }
@@ -28,6 +31,7 @@ public class Spawner : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
+            GameManager.Instance.OnDistanceChanged -= AdjustSpawnInterval;
             GameManager.Instance.OnGameOver -= CancelRocketSpawning;
         }
     }
@@ -41,6 +45,20 @@ public class Spawner : MonoBehaviour
 
         float zOffset = Random.Range(-1, 5);
         Instantiate(rocketPrefab, transform.position + new Vector3(leftSide ? -20 : 20, spawnHeight, zOffset), Quaternion.Euler(0f, leftSide ? 180f : 0, 0));
+    }
+
+    private void AdjustSpawnInterval(int distance)
+    {
+        if(distance > maxDistanceTraveled)
+        {
+            maxDistanceTraveled = distance;
+            if (maxDistanceTraveled % 20 == 0)
+            {
+                rocketSpawnInterval *= 0.9f;
+                CancelInvoke("SpawnRocket");
+                InvokeRepeating("SpawnRocket", 0f, rocketSpawnInterval);
+            }
+        }
     }
 
     private void CancelRocketSpawning(long score)
