@@ -11,6 +11,9 @@ public class Rocket : MonoBehaviour
 
     private Vector3 startingPos;
 
+    [SerializeField]
+    private GameObject explosionEffectPrefab;
+
     void Start()
     {
         startingPos = transform.position;
@@ -27,7 +30,7 @@ public class Rocket : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if(GameManager.CurrentGameState == GameState.GameOver)
+        if (GameManager.CurrentGameState == GameState.GameOver)
         {
             Destroy(gameObject);
         }
@@ -35,9 +38,15 @@ public class Rocket : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
+            TriggerExplosion();
             GameManager.Instance.GameOver();
+            Destroy(gameObject);
+        }
+        else if (collision.gameObject.CompareTag("Platform"))
+        {
+            TriggerExplosion();
             Destroy(gameObject);
         }
     }
@@ -45,5 +54,15 @@ public class Rocket : MonoBehaviour
     private void FixedUpdate()
     {
         rb.MovePosition(transform.position + -transform.right * speed * Time.fixedDeltaTime);
+    }
+
+    private void TriggerExplosion()
+    {
+        if (explosionEffectPrefab != null)
+        {
+            GameObject explosion = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+
+            Destroy(explosion, 5f);
+        }
     }
 }

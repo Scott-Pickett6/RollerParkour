@@ -260,6 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
+  explosionEffectPrefab: {fileID: 3702631383622039973, guid: fbbda809d59774e4cbd37c5c2341e9a8, type: 3}
 --- !u!54 &1994301332431699882
 Rigidbody:
   m_ObjectHideFlags: 0
