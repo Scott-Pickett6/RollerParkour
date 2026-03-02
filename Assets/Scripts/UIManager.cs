@@ -13,6 +13,9 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI distanceText;
 
     [SerializeField]
+    private TextMeshProUGUI powerUpTimer;
+
+    [SerializeField]
     private TextMeshProUGUI scoreText;
 
     [SerializeField]
@@ -28,6 +31,7 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.OnDistanceChanged += UpdateDistance;
             GameManager.Instance.OnTimerUpdated += UpdateTimer;
             GameManager.Instance.OnGameOver += HandleGameOver;
+            GameManager.Instance.OnPowerUpTimerUpdated += UpdatePowerUpTimer;
         }
     }
 
@@ -38,6 +42,7 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.OnDistanceChanged -= UpdateDistance;
             GameManager.Instance.OnTimerUpdated -= UpdateTimer;
             GameManager.Instance.OnGameOver -= HandleGameOver;
+            GameManager.Instance.OnPowerUpTimerUpdated -= UpdatePowerUpTimer;
         }
     }
 
@@ -57,5 +62,10 @@ public class UIManager : MonoBehaviour
         scoreText.text = "Final Score: " + score;
         restartButton.gameObject.SetActive(true);
         mainMenuButton.gameObject.SetActive(true);
+    }
+
+    private void UpdatePowerUpTimer(int secondsLeft)
+    {
+       powerUpTimer.text = "Power Up Time: " + secondsLeft;
     }
 }

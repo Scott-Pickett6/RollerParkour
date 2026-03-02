@@ -6,7 +6,7 @@ public class Platform : MonoBehaviour
 {
     private GameObject player;
     private Spawner spawner;
-
+    private GameObject powerUp;
     private bool hasBeenHit;
 
     void Start()
@@ -14,6 +14,12 @@ public class Platform : MonoBehaviour
         hasBeenHit = false;
         player = GameObject.FindWithTag("Player");
         spawner = player.GetComponent<Spawner>();
+        powerUp = gameObject.transform.Find("Power_Up").gameObject;
+        float powerUpChance = Random.value;
+        if (powerUpChance < 0.8f)
+        {
+            powerUp.SetActive(false);
+        }
     }
 
     

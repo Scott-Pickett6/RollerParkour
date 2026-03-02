@@ -20,9 +20,14 @@ public class GameManager : MonoBehaviour
     public event System.Action<string> OnTimerUpdated;
     public event System.Action<long> OnGameOver;
 
+    public event System.Action<int> OnPowerUpTimerUpdated;
+    public event System.Action<bool> OnPowerUpStatusChanged;
+
     private float elapsedTime = 0f;
     private int distanceTraveled = 0;
     private bool isTimerRunning = false;
+    private bool hasPowerUp = false;
+    private float powerUpDuration = 0f;
 
     private void Awake()
     {
@@ -45,6 +50,21 @@ public class GameManager : MonoBehaviour
             int seconds = Mathf.RoundToInt(elapsedTime);
             OnTimerUpdated?.Invoke(FormatTime(seconds));
         }
+        if (hasPowerUp)
+        {
+            powerUpDuration -= Time.deltaTime;
+            if (powerUpDuration <= 0f)
+            {
+                hasPowerUp = false;
+                powerUpDuration = 0f;
+                OnPowerUpStatusChanged?.Invoke(false);
+                OnPowerUpTimerUpdated?.Invoke(0);
+            }
+            else
+            {
+                OnPowerUpTimerUpdated?.Invoke(Mathf.RoundToInt(powerUpDuration));
+            }
+        }
     }
 
     public void StartTimer()
@@ -66,8 +86,25 @@ public class GameManager : MonoBehaviour
 
         isTimerRunning = false;
         long score = CalculateScore(distanceTraveled, elapsedTime);
+        hasPowerUp = false;
         SaveBestScore(score);
         OnGameOver?.Invoke(score);
+        CurrentGameState = GameState.GameOver;
+    }
+
+    public void RocketHitPlayer()
+    {
+        if (hasPowerUp)
+        {
+            hasPowerUp = false;
+            powerUpDuration = 0f;
+            OnPowerUpTimerUpdated?.Invoke(0);
+            OnPowerUpStatusChanged?.Invoke(false);
+        }
+        else
+        {
+            GameOver();
+        }
     }
 
     public void RestartGame()
@@ -76,6 +113,8 @@ public class GameManager : MonoBehaviour
         isTimerRunning = false;
         elapsedTime = 0f;
         distanceTraveled = 0;
+        powerUpDuration = 0f;
+        hasPowerUp = false;
         Time.timeScale = 1f;
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -86,9 +125,18 @@ public class GameManager : MonoBehaviour
         CurrentGameState = GameState.Starting;
         isTimerRunning = false;
         elapsedTime = 0f;
+        hasPowerUp= false;
+        powerUpDuration = 0f;
         distanceTraveled = 0;
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void HitPowerUp()
+    {
+        hasPowerUp = true;
+        powerUpDuration += 20f;
+        OnPowerUpStatusChanged?.Invoke(true);
     }
 
     private string FormatTime(int seconds)
@@ -105,7 +153,7 @@ public class GameManager : MonoBehaviour
 
         double totalScore = (distanceScore + speedBonus) * 0.01;
 
-        return (long)totalScore;
+        return (long)Mathf.Max((long)totalScore, 0);
     }
 
     private void SaveBestScore(long score)

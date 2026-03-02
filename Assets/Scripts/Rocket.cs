@@ -41,7 +41,7 @@ public class Rocket : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             TriggerExplosion();
-            GameManager.Instance.GameOver();
+            GameManager.Instance.RocketHitPlayer();
             Destroy(gameObject);
         }
         else if (collision.gameObject.CompareTag("Platform"))
