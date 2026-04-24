@@ -1,5 +1,5 @@
-using Assets.Scripts.Interfaces;
-using Assets.Scripts.Managers;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Rocket : MonoBehaviour
@@ -7,7 +7,7 @@ public class Rocket : MonoBehaviour
     private Rigidbody rb;
 
     [SerializeField]
-    private float speed = 6;
+    private float speed;
 
     private Vector3 startingPos;
 
@@ -24,24 +24,13 @@ public class Rocket : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void OnEnable()
-    {
-        if (GameStateManager.Instance != null)
-        {
-            GameStateManager.Instance.OnGameOver += HandleGameOver;
-        }
-    }
-    private void OnDisable()
-    {
-        if (GameStateManager.Instance != null)
-        {
-            GameStateManager.Instance.OnGameOver -= HandleGameOver;
-        }
-    }
-
     void Update()
     {
         if (Mathf.Abs(transform.position.x - startingPos.x) > 50f)
+        {
+            Destroy(gameObject);
+        }
+        if (GameManager.CurrentGameState == GameState.GameOver)
         {
             Destroy(gameObject);
         }
@@ -49,11 +38,17 @@ public class Rocket : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent<IRocketHittable>(out IRocketHittable hittable))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            hittable.OnRocketHit();
+            TriggerExplosion();
+            GameManager.Instance.RocketHitPlayer();
+            Destroy(gameObject);
         }
-        Explode();
+        else if (collision.gameObject.CompareTag("Platform"))
+        {
+            TriggerExplosion();
+            Destroy(gameObject);
+        }
     }
 
     private void FixedUpdate()
@@ -61,19 +56,13 @@ public class Rocket : MonoBehaviour
         rb.MovePosition(transform.position + -transform.right * speed * Time.fixedDeltaTime);
     }
 
-    private void HandleGameOver()
-    {
-        Destroy(gameObject);
-    }
-
-    private void Explode()
+    private void TriggerExplosion()
     {
         if (explosionEffectPrefab != null)
         {
             GameObject explosion = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
 
             Destroy(explosion, 5f);
-            Destroy(gameObject);
         }
     }
 }

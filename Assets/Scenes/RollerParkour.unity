@@ -1429,9 +1429,6 @@ GameObject:
   - component: {fileID: 1529766751}
   - component: {fileID: 1529766750}
   - component: {fileID: 1529766752}
-  - component: {fileID: 1529766755}
-  - component: {fileID: 1529766754}
-  - component: {fileID: 1529766753}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1583,42 +1580,6 @@ MonoBehaviour:
   - {fileID: 622106570850198169, guid: ed36e4820a008d54f812678a443e1841, type: 3}
   - {fileID: 5642428207530201843, guid: 7a92b629eb79a304995409afc04648ae, type: 3}
   rocketSpawnInterval: 3
---- !u!114 &1529766753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529766744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfa58966c896cfb4db969398715d6074, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1529766754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529766744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5131668be8f8b1a4ea6eddc7887e0fad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1529766755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529766744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba15fb6cd4308444e9b2656367f7aab8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1607286279
 GameObject:
   m_ObjectHideFlags: 0

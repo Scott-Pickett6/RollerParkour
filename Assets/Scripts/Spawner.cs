@@ -1,35 +1,38 @@
-using Assets.Scripts.Managers;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject rocketPrefab;
 
-    [SerializeField]
+    [SerializeField] 
     private GameObject[] platformPrefab;
 
     [SerializeField]
     private float rocketSpawnInterval;
 
     private int maxDistanceTraveled = 0;
-    private bool isSpawningRockets = false;
 
-    private void OnEnable()
+
+    void Start()
     {
-        if (GameStateManager.Instance != null)
+        InvokeRepeating("SpawnRocket", 0f, rocketSpawnInterval);
+        if (GameManager.Instance != null)
         {
-            GameStateManager.Instance.OnGameStarted += StartSpawning;
-            GameStateManager.Instance.OnGameOver += StopSpawning;
-        }
+            GameManager.Instance.OnDistanceChanged += AdjustSpawnInterval;
+            GameManager.Instance.OnGameOver += CancelRocketSpawning;
+        }   
     }
 
     private void OnDestroy()
     {
-        if (GameStateManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            GameStateManager.Instance.OnGameStarted -= StartSpawning;
-            GameStateManager.Instance.OnGameOver -= StopSpawning;
+            GameManager.Instance.OnDistanceChanged -= AdjustSpawnInterval;
+            GameManager.Instance.OnGameOver -= CancelRocketSpawning;
         }
     }
 
@@ -46,7 +49,7 @@ public class Spawner : MonoBehaviour
 
     private void AdjustSpawnInterval(int distance)
     {
-        if (distance > maxDistanceTraveled)
+        if(distance > maxDistanceTraveled)
         {
             maxDistanceTraveled = distance;
             if (maxDistanceTraveled % 20 == 0)
@@ -70,15 +73,5 @@ public class Spawner : MonoBehaviour
 
         int randomIndex = Random.Range(0, platformPrefab.Length);
         Instantiate(platformPrefab[randomIndex], newPos, Quaternion.identity);
-    }
-
-    private void StartSpawning()
-    {
-        isSpawningRockets = true;
-    }
-
-    private void StopSpawning()
-    {
-        isSpawningRockets = false;
     }
 }
