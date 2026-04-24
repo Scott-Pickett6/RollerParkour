@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,6 +64,13 @@ public class UIManager : MonoBehaviour
 
     private void UpdatePowerUpTimer(int secondsLeft)
     {
-       powerUpTimer.text = "Power Up Time: " + secondsLeft;
+        powerUpTimer.text = "Power Up Time: " + secondsLeft;
+    }
+
+    private string FormatTime(int seconds)
+    {
+        int mins = seconds / 60;
+        int secs = seconds % 60;
+        return mins.ToString("00") + ":" + secs.ToString("00");
     }
 }

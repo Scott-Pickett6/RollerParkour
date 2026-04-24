@@ -33,7 +33,7 @@ public class MainMenuManager : MonoBehaviour
             return;
         }
 
-        long bestScore = GameManager.Instance.LoadBestScore();
+        int bestScore = GameManager.Instance.LoadBestScore();
         highScoreText.text = $"Best: {bestScore}";
     }
 }
