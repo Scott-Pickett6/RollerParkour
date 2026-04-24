@@ -8,11 +8,11 @@ namespace Assets.Scripts.Player
     {
         public void OnRocketHit()
         {
-            if (PowerUpManager.Instance.hasPowerUp)
+            if (PowerUpManager.Instance != null && PowerUpManager.Instance.hasPowerUp)
             {
                 PowerUpManager.Instance.EndPowerUp();
             }
-            else
+            else if (GameStateManager.Instance != null)
             {
                 GameStateManager.Instance.GameOver();
             }

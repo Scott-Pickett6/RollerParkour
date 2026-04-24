@@ -1,19 +1,20 @@
+using Assets.Scripts.Managers;
 using UnityEngine;
 
 public class ButtonRelayManger : MonoBehaviour
 {
     public void ClickRestart()
     {
-        if (GameManager.Instance != null)
+        if (GameStateManager.Instance != null)
         {
-            GameManager.Instance.RestartGame();
+            GameStateManager.Instance.RestartGame();
         }
     }
     public void ClickMainMenu()
     {
-        if (GameManager.Instance != null)
+        if (GameStateManager.Instance != null)
         {
-            GameManager.Instance.LoadMainMenu();
+            GameStateManager.Instance.LoadMainMenu();
         }
     }
 }

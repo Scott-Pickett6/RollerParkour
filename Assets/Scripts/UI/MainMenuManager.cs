@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -27,13 +25,7 @@ public class MainMenuManager : MonoBehaviour
     }
     private void UpdateBestScore()
     {
-        if (GameManager.Instance == null)
-        {
-            highScoreText.text = "Best Score: 0";
-            return;
-        }
-
-        int bestScore = GameManager.Instance.LoadBestScore();
+        int bestScore = PlayerPrefs.GetInt("BestScore", 0);
         highScoreText.text = $"Best: {bestScore}";
     }
 }

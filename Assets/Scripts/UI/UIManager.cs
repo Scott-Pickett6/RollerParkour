@@ -1,3 +1,4 @@
+using Assets.Scripts.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,49 +23,132 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button mainMenuButton;
 
+    private ScoreSystemManager scoreSystemManager;
+    private PowerUpManager powerUpManager;
+    private GameStateManager gameStateManager;
+
     private void Start()
     {
-        if (GameManager.Instance != null)
+        scoreSystemManager = ScoreSystemManager.Instance;
+        powerUpManager = PowerUpManager.Instance;
+        gameStateManager = GameStateManager.Instance;
+
+        if (gameStateManager != null)
         {
-            GameManager.Instance.OnDistanceChanged += UpdateDistance;
-            GameManager.Instance.OnTimerUpdated += UpdateTimer;
-            GameManager.Instance.OnGameOver += HandleGameOver;
-            GameManager.Instance.OnPowerUpTimerUpdated += UpdatePowerUpTimer;
+            gameStateManager.OnGameOver += HandleGameOver;
+        }
+
+        HandleGameStarted();
+    }
+
+    private void Update()
+    {
+        if (scoreSystemManager == null)
+        {
+            scoreSystemManager = ScoreSystemManager.Instance;
+        }
+
+        if (powerUpManager == null)
+        {
+            powerUpManager = PowerUpManager.Instance;
+        }
+
+        if (gameStateManager == null && GameStateManager.Instance != null)
+        {
+            gameStateManager = GameStateManager.Instance;
+            gameStateManager.OnGameOver += HandleGameOver;
+        }
+
+        if (scoreSystemManager != null)
+        {
+            UpdateDistance(scoreSystemManager.DistanceTraveled);
+            UpdateTimer(FormatTime(scoreSystemManager.ElapsedSeconds));
+        }
+
+        if (powerUpManager != null && powerUpManager.hasPowerUp)
+        {
+            UpdatePowerUpTimer(powerUpManager.RemainingSeconds);
+        }
+        else if (powerUpTimer != null)
+        {
+            powerUpTimer.text = string.Empty;
         }
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
+        if (gameStateManager != null)
         {
-            GameManager.Instance.OnDistanceChanged -= UpdateDistance;
-            GameManager.Instance.OnTimerUpdated -= UpdateTimer;
-            GameManager.Instance.OnGameOver -= HandleGameOver;
-            GameManager.Instance.OnPowerUpTimerUpdated -= UpdatePowerUpTimer;
+            gameStateManager.OnGameOver -= HandleGameOver;
         }
     }
 
     private void UpdateTimer(string time)
     {
-        timerText.text = "Time: " + time;
+        if (timerText != null)
+        {
+            timerText.text = "Time: " + time;
+        }
     }
 
     private void UpdateDistance(int zDistance)
     {
-        distanceText.text = "Distance: " + zDistance + " m";
+        if (distanceText != null)
+        {
+            distanceText.text = "Distance: " + zDistance + " m";
+        }
     }
 
-    private void HandleGameOver(long score)
+    private void HandleGameOver()
     {
-        scoreText.gameObject.SetActive(true);
-        scoreText.text = "Final Score: " + score;
-        restartButton.gameObject.SetActive(true);
-        mainMenuButton.gameObject.SetActive(true);
+        int score = 0;
+        if (scoreSystemManager != null)
+        {
+            score = scoreSystemManager.CalculateScore();
+            scoreSystemManager.SaveBestScore(score);
+        }
+
+        if (scoreText != null)
+        {
+            scoreText.gameObject.SetActive(true);
+            scoreText.text = "Final Score: " + score;
+        }
+
+        if (restartButton != null)
+        {
+            restartButton.gameObject.SetActive(true);
+        }
+
+        if (mainMenuButton != null)
+        {
+            mainMenuButton.gameObject.SetActive(true);
+        }
     }
 
     private void UpdatePowerUpTimer(int secondsLeft)
     {
-        powerUpTimer.text = "Power Up Time: " + secondsLeft;
+        if (powerUpTimer != null)
+        {
+            powerUpTimer.text = "Power Up Time: " + secondsLeft;
+        }
+    }
+
+    private void HandleGameStarted()
+    {
+        if (scoreText != null)
+        {
+            scoreText.gameObject.SetActive(false);
+        }
+
+        if (restartButton != null)
+        {
+            restartButton.gameObject.SetActive(false);
+        }
+
+        if (mainMenuButton != null)
+        {
+            mainMenuButton.gameObject.SetActive(false);
+        }
     }
 
     private string FormatTime(int seconds)

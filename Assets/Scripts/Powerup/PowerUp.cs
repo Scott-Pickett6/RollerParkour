@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Managers;
 using UnityEngine;
 
 public class PowerUp : MonoBehaviour
@@ -8,9 +6,9 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && PowerUpManager.Instance != null)
         {
-            GameManager.Instance.HitPowerUp();
+            PowerUpManager.Instance.HitPowerUp();
             Destroy(gameObject);
             Destroy(transform.parent.gameObject);
         }

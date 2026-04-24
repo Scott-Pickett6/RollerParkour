@@ -1,4 +1,3 @@
-using Assets.Scripts.GameManagers;
 using Assets.Scripts.Managers;
 using UnityEngine;
 
@@ -13,12 +12,18 @@ public class PlayerPositionManger : MonoBehaviour
 
     private void OnEnable()
     {
-        GameStateManager.Instance.OnGameOver += HandleGameOver;
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.OnGameOver += HandleGameOver;
+        }
     }
 
     private void OnDisable()
     {
-        GameStateManager.Instance.OnGameOver -= HandleGameOver;
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.OnGameOver -= HandleGameOver;
+        }
     }
 
     private void Update()
@@ -28,7 +33,11 @@ public class PlayerPositionManger : MonoBehaviour
 
     private void CheckPlayerPosition()
     {
-        ScoreSystemManager.Instance.UpdateDistance(Mathf.RoundToInt(transform.position.z));
+        if (ScoreSystemManager.Instance != null)
+        {
+            ScoreSystemManager.Instance.UpdateDistance(Mathf.RoundToInt(transform.position.z));
+        }
+
         CheckIfFallen();
     }
 
@@ -42,6 +51,9 @@ public class PlayerPositionManger : MonoBehaviour
 
     private void HandleGameOver()
     {
-        rb.isKinematic = true;
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+        }
     }
 }

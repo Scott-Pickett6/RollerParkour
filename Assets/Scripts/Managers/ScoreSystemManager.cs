@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Managers;
 using UnityEngine;
 
-namespace Assets.Scripts.GameManagers
+namespace Assets.Scripts.Managers
 {
     public class ScoreSystemManager : MonoBehaviour
     {
@@ -11,34 +11,36 @@ namespace Assets.Scripts.GameManagers
         private int distanceTraveled = 0;
         private bool isTimerRunning = false;
 
+        public int DistanceTraveled => distanceTraveled;
+        public int ElapsedSeconds => Mathf.FloorToInt(elapsedTime);
+
         private void Awake()
         {
-            if (instance != null && instance != this)
+            if (Instance != null && Instance != this)
             {
                 Destroy(this.gameObject);
                 return;
             }
-            else
-            {
-                instance = this;
-                DontDestroyOnLoad(this.gameObject);
-            }
+
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
 
         private void OnEnable()
         {
             if (GameStateManager.Instance != null)
             {
-                GameStateManager.OnGameStarted += StartTimer;
-                GameStateManager.OnGameOver += StopTimer;
+                GameStateManager.Instance.OnGameStarted += StartTimer;
+                GameStateManager.Instance.OnGameOver += StopTimer;
             }
         }
+
         private void OnDisable()
         {
             if (GameStateManager.Instance != null)
             {
-                GameStateManager.OnGameStarted -= StartTimer;
-                GameStateManager.OnGameOver -= StopTimer;
+                GameStateManager.Instance.OnGameStarted -= StartTimer;
+                GameStateManager.Instance.OnGameOver -= StopTimer;
             }
         }
 
@@ -57,7 +59,7 @@ namespace Assets.Scripts.GameManagers
 
         private void StartTimer()
         {
-            elapsedTime = 0;
+            elapsedTime = 0f;
             isTimerRunning = true;
         }
 
@@ -70,14 +72,17 @@ namespace Assets.Scripts.GameManagers
         {
             distanceTraveled = distance;
         }
+
         public int LoadBestScore()
         {
             if (PlayerPrefs.HasKey("BestScore"))
             {
                 return PlayerPrefs.GetInt("BestScore");
             }
+
             return 0;
         }
+
         public int CalculateScore()
         {
             double distanceScore = System.Math.Pow(distanceTraveled, 2.5);
@@ -87,6 +92,7 @@ namespace Assets.Scripts.GameManagers
 
             return Mathf.Max(0, Mathf.RoundToInt((float)totalScore));
         }
+
         public void SaveBestScore(int score)
         {
             int bestScore = 0;
@@ -94,6 +100,7 @@ namespace Assets.Scripts.GameManagers
             {
                 bestScore = PlayerPrefs.GetInt("BestScore");
             }
+
             if (score > bestScore)
             {
                 PlayerPrefs.SetInt("BestScore", score);

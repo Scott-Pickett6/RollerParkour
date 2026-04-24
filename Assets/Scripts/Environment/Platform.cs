@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.Enums;
+using Assets.Scripts.Managers;
 using UnityEngine;
 
 public class Platform : MonoBehaviour
@@ -13,10 +13,19 @@ public class Platform : MonoBehaviour
     {
         hasBeenHit = false;
         player = GameObject.FindWithTag("Player");
-        spawner = player.GetComponent<Spawner>();
-        powerUp = gameObject.transform.Find("Power_Up").gameObject;
-        float powerUpChance = Random.value;
-        if (powerUpChance < 0.8f)
+        if (player != null)
+        {
+            spawner = player.GetComponent<Spawner>();
+        }
+
+        Transform powerUpTransform = transform.Find("Power_Up");
+        if (powerUpTransform == null)
+        {
+            return;
+        }
+
+        powerUp = powerUpTransform.gameObject;
+        if (Random.value < 0.8f)
         {
             powerUp.SetActive(false);
         }
@@ -25,6 +34,11 @@ public class Platform : MonoBehaviour
     
     void Update()
     {
+        if (player == null)
+        {
+            return;
+        }
+
         if(player.transform.position.z - transform.position.z > 7)
         {
             Destroy(gameObject);
@@ -33,9 +47,19 @@ public class Platform : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && !hasBeenHit && GameManager.CurrentGameState != GameState.GameOver)
+        if (!collision.gameObject.CompareTag("Player") || hasBeenHit)
         {
-            hasBeenHit = true;
+            return;
+        }
+
+        if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.GameOver)
+        {
+            return;
+        }
+
+        hasBeenHit = true;
+        if (spawner != null)
+        {
             spawner.SpawnGround(transform.position);
         }
     }

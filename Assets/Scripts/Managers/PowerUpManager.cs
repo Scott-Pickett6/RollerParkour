@@ -12,6 +12,7 @@ namespace Assets.Scripts.Managers
 
         public bool hasPowerUp { get; private set; } = false;
         private float powerUpDuration = 0f;
+        public int RemainingSeconds => Mathf.CeilToInt(powerUpDuration);
 
         private void Awake()
         {
@@ -41,7 +42,7 @@ namespace Assets.Scripts.Managers
                 {
                     hasPowerUp = false;
                     powerUpDuration = 0f;
-                    OnLostPowerUp?.Invoke();
+                    OnPowerUpEnded?.Invoke();
                 }
             }
         }

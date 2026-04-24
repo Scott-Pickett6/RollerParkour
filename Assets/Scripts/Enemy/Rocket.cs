@@ -26,11 +26,17 @@ public class Rocket : MonoBehaviour
 
     private void OnEnable()
     {
-        GameStateManager.Instance.OnGameOver += HandleGameOver;
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.OnGameOver += HandleGameOver;
+        }
     }
     private void OnDisable()
     {
-        GameStateManager.Instance.OnGameOver -= HandleGameOver;
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.OnGameOver -= HandleGameOver;
+        }
     }
 
     void Update()

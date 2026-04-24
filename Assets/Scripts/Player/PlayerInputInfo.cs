@@ -2,9 +2,9 @@
 {
     public readonly struct PlayerInputInfo
     {
-        public float ForwardInput { get; private set; }
-        public float SideInput { get; private set; }
-        public bool JumpPressed { get; private set; }
+        public readonly float ForwardInput { get; }
+        public readonly float SideInput { get; }
+        public readonly bool JumpPressed { get; }
 
         public PlayerInputInfo(float forwardInput, float sideInput, bool jumpPressed)
         {

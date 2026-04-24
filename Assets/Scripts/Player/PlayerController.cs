@@ -6,7 +6,6 @@ namespace Assets.Scripts.Player
 {
     public class PlayerController : MonoBehaviour
     {
-
         [SerializeField] private PlayerInput input;
         [SerializeField] private PlayerMovement movement;
 
@@ -15,10 +14,15 @@ namespace Assets.Scripts.Player
 
         private void Update()
         {
+            if (GameStateManager.Instance == null)
+            {
+                return;
+            }
+
             currentGameState = GameStateManager.Instance.CurrentGameState;
             currentInputInfo = input.GetInput();
 
-            if (gameState == GameState.Starting)
+            if (currentGameState == GameState.Starting)
             {
                 if (currentInputInfo.HasInput())
                 {
@@ -29,7 +33,12 @@ namespace Assets.Scripts.Player
 
         private void FixedUpdate()
         {
-            GameState gameState = GameStateManager.Instance.CurrentGameState;
+            if (GameStateManager.Instance == null)
+            {
+                return;
+            }
+
+            currentGameState = GameStateManager.Instance.CurrentGameState;
 
             if (currentGameState != GameState.Playing)
                 return;
