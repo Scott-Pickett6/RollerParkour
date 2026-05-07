@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using TMPro;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class MainMenuManager : MonoBehaviour
             return;
         }
 
-        long bestScore = GameManager.Instance.LoadBestScore();
+        long bestScore = GameScoreManager.Instance.LoadBestScore();
         highScoreText.text = $"Best: {bestScore}";
     }
 }

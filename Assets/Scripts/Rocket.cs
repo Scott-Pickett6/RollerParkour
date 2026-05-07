@@ -1,42 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
-public class Rocket : MonoBehaviour
+public class Rocket : Entity
 {
-    private Rigidbody rb;
 
     [SerializeField]
-    private float speed;
-
-    private Vector3 startingPos;
-
+    float speed;
     [SerializeField]
-    private GameObject explosionEffectPrefab;
+    GameObject explosionEffectPrefab;
+    [SerializeField]
+    float destroyDistance;
+    
+    Rigidbody rb;
+    Vector3 startingPos;
 
     void Start()
     {
         startingPos = transform.position;
     }
 
-    private void Awake()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        if (Mathf.Abs(transform.position.x - startingPos.x) > 50f)
+        if (DetectOffMap())
         {
             Destroy(gameObject);
         }
-        if (GameManager.CurrentGameState == GameState.GameOver)
+        if (GameStateManager.Instance.CurrentGameState == GameState.GameOver)
         {
             Destroy(gameObject);
         }
     }
+    
+    void FixedUpdate()
+    {
+        rb.MovePosition(transform.position + -transform.right * (speed * Time.fixedDeltaTime));
+    }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -51,12 +56,7 @@ public class Rocket : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        rb.MovePosition(transform.position + -transform.right * speed * Time.fixedDeltaTime);
-    }
-
-    private void TriggerExplosion()
+    void TriggerExplosion()
     {
         if (explosionEffectPrefab != null)
         {
@@ -65,4 +65,14 @@ public class Rocket : MonoBehaviour
             Destroy(explosion, 5f);
         }
     }
+
+    bool DetectOffMap()
+    {
+        if (Mathf.Abs(transform.position.x - startingPos.x) > destroyDistance)
+        {
+            return true;
+        }
+        return false;
+    }
+    
 }

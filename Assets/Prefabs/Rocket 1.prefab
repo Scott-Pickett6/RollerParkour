@@ -75,6 +75,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   explosionEffectPrefab: {fileID: 1620140131458704099, guid: 57e5b83dfee152a47aedf7d83c83e9f5, type: 3}
+  destroyDistance: 50
 --- !u!1001 &8027682265808990621
 PrefabInstance:
   m_ObjectHideFlags: 0
