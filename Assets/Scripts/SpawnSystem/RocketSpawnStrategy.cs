@@ -1,0 +1,46 @@
+﻿using UnityEngine;
+
+namespace SpawnSystem
+{
+    public class RocketSpawnStrategy : ISpawnStrategy
+    {
+        readonly Transform originTransform;
+        readonly float horizontalDistance;
+        readonly float minHeight;
+        readonly float maxHeight;
+        readonly float minZOffset;
+        readonly float maxZOffset;
+
+        public RocketSpawnStrategy(
+            Transform originPosition,
+            float horizontalDistance,
+            float minHeight,
+            float maxHeight,
+            float minZOffset,
+            float maxZOffset)
+        {
+            this.originTransform = originPosition;
+            this.horizontalDistance = horizontalDistance;
+            this.minHeight = minHeight;
+            this.maxHeight = maxHeight;
+            this.minZOffset = minZOffset;
+            this.maxZOffset = maxZOffset;
+        }
+
+        public SpawnPointData GetSpawnPointData()
+        {
+            bool spawnOnLeftSide = Random.value > 0.5f;
+
+            float lowBias = Random.value * Random.value;
+            float spawnHeight = Mathf.Lerp(minHeight, maxHeight, lowBias);
+
+            float xOffset = spawnOnLeftSide ? -horizontalDistance : horizontalDistance;
+            float zOffset = Random.Range(minZOffset, maxZOffset);
+
+            Vector3 position = originTransform.position + new Vector3(xOffset, spawnHeight, zOffset);
+            Quaternion rotation = Quaternion.Euler(0f, spawnOnLeftSide ? 180f : 0f, 0f);
+
+            return new SpawnPointData(position, rotation);
+        }
+    }
+}

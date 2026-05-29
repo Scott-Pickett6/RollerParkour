@@ -96,21 +96,6 @@ namespace Game
             OnGameStateChanged?.Invoke(GameState.GameOver);
         }
 
-        public void RocketHitPlayer()
-        {
-            if (hasPowerUp)
-            {
-                hasPowerUp = false;
-                powerUpDuration = 0f;
-                OnPowerUpTimerUpdated?.Invoke(0);
-                OnPowerUpStatusChanged?.Invoke(false);
-            }
-            else
-            {
-                GameOver();
-            }
-        }
-
         public void RestartGame()
         {
             OnGameStateChanged?.Invoke(GameState.Starting);

@@ -1,4 +1,5 @@
 using Game;
+using PowerUp;
 using UnityEngine;
 
 namespace Player
@@ -13,6 +14,7 @@ namespace Player
         IOffMapDetector playerFallDetector;
 
         bool jumpRequested;
+        public bool HasSheild { get; set; } = false;
         
         void Awake()
         {
@@ -60,6 +62,16 @@ namespace Player
         {
             GameManager.Instance.GameOver();
             playerMovement.DisablePhysics();
+        }
+        
+        public void ApplyPowerUpEffect(PowerUpEffect powerUpEffect)
+        {
+            powerUpEffect.ApplyPowerUp(gameObject);
+
+            if (powerUpEffect is TimedPowerUpEffect timedPowerUpEffect)
+            {
+                StartCoroutine(timedPowerUpEffect.StartTimedPowerUp(gameObject));
+            }
         }
     }
 }

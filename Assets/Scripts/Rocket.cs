@@ -1,4 +1,7 @@
+using System;
 using Game;
+using Player;
+using PowerUp;
 using UnityEngine;
 
 public class Rocket : Entity
@@ -24,6 +27,16 @@ public class Rocket : Entity
         rb = GetComponent<Rigidbody>();
     }
 
+    void OnEnable()
+    {
+        DestroyAllEnemyPowerUpEffect.OnDestroyAllEnemies += Destroy;
+    }
+
+    void OnDisable()
+    {
+        DestroyAllEnemyPowerUpEffect.OnDestroyAllEnemies -= Destroy;
+    }
+
     void Update()
     {
         if (DetectOffMap())
@@ -43,17 +56,19 @@ public class Rocket : Entity
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        // better solution would be to handle the shield logic in the player script
+        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+        if (player != null && player.HasSheild)
         {
-            TriggerExplosion();
-            GameManager.Instance.RocketHitPlayer();
-            Destroy(gameObject);
+            player.HasSheild = false;
         }
-        else if (collision.gameObject.CompareTag("Platform"))
+        else
         {
-            TriggerExplosion();
-            Destroy(gameObject);
+            // we don't like this
+            GameManager.Instance.GameOver();
         }
+        TriggerExplosion();
+        Destroy(gameObject);
     }
 
     void TriggerExplosion()
@@ -74,5 +89,9 @@ public class Rocket : Entity
         }
         return false;
     }
-    
+
+    void Destroy()
+    {
+        Destroy(gameObject);
+    }
 }
