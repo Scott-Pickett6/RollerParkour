@@ -12,7 +12,7 @@ namespace SpawnSystem
         [SerializeField]
         float maxXOffset = 15f;
         [SerializeField]
-        float despawnDistance = 15f;
+        float despawnDistance = 8f;
         
         public float ZSpacing => zSpacing;
         public float MinXOffset => minXOffset;

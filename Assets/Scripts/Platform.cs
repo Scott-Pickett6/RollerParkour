@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Game;
 using SpawnSystem;
 using UnityEngine;
@@ -12,11 +13,12 @@ public class Platform : Entity
     bool hasBeenHit;
     
     PlatformData data;
-    private Transform player;
+    Transform player;
 
     public void Init(PlatformData data, Transform player)
     {
         this.data = data;
+        this.player = player;
     }
 
     void Start()
