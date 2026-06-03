@@ -2,7 +2,7 @@
 
 namespace SpawnSystem
 {
-    public class DefaultSpawnStrategy : ISpawnStrategy
+    public class DefaultSpawnStrategy : SpawnStrategy
     {
         readonly Transform spawnPoint;
         
@@ -11,7 +11,7 @@ namespace SpawnSystem
             this.spawnPoint = spawnPoint;
         }
         
-        public SpawnPointData GetSpawnPointData()
+        public override SpawnPointData GetSpawnPointData()
         {
             return new SpawnPointData(spawnPoint.position, spawnPoint.rotation);
         }

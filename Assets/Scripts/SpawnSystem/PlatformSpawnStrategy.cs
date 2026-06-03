@@ -3,7 +3,7 @@
 namespace SpawnSystem
 {
     
-    public class PlatformSpawnStrategy : ISpawnStrategy
+    public class PlatformSpawnStrategy : SpawnStrategy
     {
         readonly float minXOffset;
         readonly float maxXOffset;
@@ -23,7 +23,7 @@ namespace SpawnSystem
             this.originPosition = originPosition;
         }
         
-        public SpawnPointData GetSpawnPointData()
+        public override SpawnPointData GetSpawnPointData()
         {
             float randomXOffset = Random.Range(minXOffset, maxXOffset);
             Vector3 position = originPosition + new Vector3(randomXOffset, 0f, zSpacing);

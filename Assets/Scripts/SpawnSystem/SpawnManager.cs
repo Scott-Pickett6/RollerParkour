@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Game;
 using UnityEngine;
 
@@ -7,177 +8,61 @@ namespace SpawnSystem
     public class SpawnManager : MonoBehaviour
     {
         [SerializeField]
-        RocketData rocketData;
-
-        [SerializeField]
-        PlatformData platformData;
-        
-        
-
-        [SerializeField]
         Transform playerTransform;
+        [SerializeField]
+        Platform initialPlatform;
+        
+        [SerializeField]
+        SpawnSystemDefinition[] spawnSystemDefinitions;
 
-        EntitySpawner<Rocket> rocketSpawner;
-        EntitySpawner<Platform> platformSpawner;
-
-        PlatformSpawnStrategy platformSpawnStrategy;
-
-        float currentRocketSpawnInterval;
-        int maxDistanceTraveled;
+        List<ISpawnSystem> spawnSystems;
+        List<ITickable> tickables;
+        
+        SpawnContext spawnContext;
 
         void Awake()
         {
-            BuildSpawners();
+            spawnContext = new SpawnContext
+            {
+                PlayerTransform = playerTransform,
+                InitialPlatform = initialPlatform
+            };
+            
+            spawnSystems = new List<ISpawnSystem>();
+            tickables = new List<ITickable>();
+            
+            foreach(SpawnSystemDefinition spawnSystemDefinition in spawnSystemDefinitions)
+            {
+                ISpawnSystem system = spawnSystemDefinition.CreateSpawnSystem(spawnContext);
+                spawnSystems.Add(system);
+                if (system is ITickable tickable)
+                {
+                    tickables.Add(tickable);
+                }
+            }
         }
-
+        
         void Start()
         {
-            SubscribeToExistingPlatforms();
-            StartRocketSpawning();
-            SubscribeToGameEvents();
+            foreach (ISpawnSystem spawnSystem in spawnSystems)
+            {
+                spawnSystem.Init();
+            }
         }
 
         void OnDestroy()
         {
-            UnsubscribeFromGameEvents();
-        }
-
-        void BuildSpawners()
-        {
-            BuildRocketSpawner();
-            BuildPlatformSpawner();
-        }
-
-        void BuildRocketSpawner()
-        {
-            ISpawnStrategy rocketSpawnStrategy = CreateRocketSpawnStrategy();
-            IEntityFactory<Rocket> rocketFactory = CreateRocketFactory();
-
-            rocketSpawner = new EntitySpawner<Rocket>(
-                rocketFactory,
-                rocketSpawnStrategy,
-                rocketData);
-
-            currentRocketSpawnInterval = rocketData.SpawnInterval;
-        }
-
-        ISpawnStrategy CreateRocketSpawnStrategy()
-        {
-            return new RocketSpawnStrategy(
-                playerTransform,
-                rocketData.HorizontalDistance,
-                rocketData.MinSpawnHeight,
-                rocketData.MaxSpawnHeight,
-                rocketData.MinZOffset,
-                rocketData.MaxZOffset);
-        }
-
-        IEntityFactory<Rocket> CreateRocketFactory()
-        {
-            return new EntityFactory<Rocket>();
-        }
-
-        void BuildPlatformSpawner()
-        {
-            platformSpawnStrategy = CreatePlatformSpawnStrategy();
-            IEntityFactory<Platform> platformFactory = CreatePlatformFactory();
-
-            platformSpawner = new EntitySpawner<Platform>(
-                platformFactory,
-                platformSpawnStrategy,
-                platformData);
-        }
-
-        PlatformSpawnStrategy CreatePlatformSpawnStrategy()
-        {
-            return new PlatformSpawnStrategy(
-                platformData.MinXOffset,
-                platformData.MaxXOffset,
-                platformData.ZSpacing);
-        }
-
-        IEntityFactory<Platform> CreatePlatformFactory()
-        {
-            return new EntityFactory<Platform>();
-        }
-
-        void SubscribeToGameEvents()
-        {
-            if (GameManager.Instance == null)
+            foreach (ISpawnSystem spawnSystem in spawnSystems)
             {
-                return;
-            }
-
-            GameManager.Instance.OnDistanceChanged += AdjustRocketSpawnInterval;
-            GameManager.Instance.OnGameOver += CancelRocketSpawning;
-        }
-
-        void UnsubscribeFromGameEvents()
-        {
-            if (GameManager.Instance == null)
-            {
-                return;
-            }
-
-            GameManager.Instance.OnDistanceChanged -= AdjustRocketSpawnInterval;
-            GameManager.Instance.OnGameOver -= CancelRocketSpawning;
-        }
-
-        void SubscribeToExistingPlatforms()
-        {
-            Platform[] platforms = FindObjectsOfType<Platform>();
-
-            foreach (Platform platform in platforms)
-            {
-                platform.PlayerLanded += SpawnPlatformFrom;
+                spawnSystem.Dispose();
             }
         }
 
-        void StartRocketSpawning()
+        void Update()
         {
-            CancelInvoke(nameof(SpawnRocket));
-            InvokeRepeating(nameof(SpawnRocket), 0f, currentRocketSpawnInterval);
-        }
-
-        void SpawnRocket()
-        {
-            rocketSpawner.Spawn();
-        }
-
-        void AdjustRocketSpawnInterval(int distance)
-        {
-            if (distance <= maxDistanceTraveled)
+            foreach (ITickable tickable in tickables)
             {
-                return;
-            }
-
-            maxDistanceTraveled = distance;
-
-            if (maxDistanceTraveled % rocketData.DistanceIntervalForDifficultyIncrease != 0)
-            {
-                return;
-            }
-
-            currentRocketSpawnInterval *= rocketData.IntervalMultiplier;
-
-            CancelInvoke(nameof(SpawnRocket));
-            InvokeRepeating(nameof(SpawnRocket), 0f, currentRocketSpawnInterval);
-        }
-
-        void CancelRocketSpawning(long score)
-        {
-            CancelInvoke(nameof(SpawnRocket));
-        }
-
-        void SpawnPlatformFrom(Vector3 previousPlatformPosition)
-        {
-            platformSpawnStrategy.SetOrigin(previousPlatformPosition);
-
-            Platform platform = platformSpawner.Spawn();
-
-            if (platform != null)
-            {
-                platform.PlayerLanded += SpawnPlatformFrom;
+                tickable.Tick(Time.deltaTime);
             }
         }
     }

@@ -2,7 +2,7 @@
 
 namespace SpawnSystem
 {
-    public class RocketSpawnStrategy : ISpawnStrategy
+    public class RocketSpawnStrategy : SpawnStrategy
     {
         readonly Transform originTransform;
         readonly float horizontalDistance;
@@ -27,7 +27,7 @@ namespace SpawnSystem
             this.maxZOffset = maxZOffset;
         }
 
-        public SpawnPointData GetSpawnPointData()
+        public override SpawnPointData GetSpawnPointData()
         {
             bool spawnOnLeftSide = Random.value > 0.5f;
 

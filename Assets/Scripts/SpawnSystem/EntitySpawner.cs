@@ -2,11 +2,11 @@
 {
     public class EntitySpawner<T> where T : Entity
     {
-        IEntityFactory<T> factory;
-        ISpawnStrategy strategy;
+        EntityFactory<T> factory;
+        SpawnStrategy strategy;
         EntityData data;
         
-        public EntitySpawner(IEntityFactory<T> factory, ISpawnStrategy strategy, EntityData data)
+        public EntitySpawner(EntityFactory<T> factory, SpawnStrategy strategy, EntityData data)
         {
             this.factory = factory;
             this.strategy = strategy;
