@@ -6,11 +6,11 @@ namespace Player
     public class PlayerMovement : MonoBehaviour, IMovement
     {
         [SerializeField]
-        float maxSpeed = 8f;
+        float maxSpeed;
+        [SerializeField] 
+        float accelerationRate;
         [SerializeField]
-        float acceleration = 25f;
-        [SerializeField]
-        float jumpForce = 8f;
+        float jumpForce;
         
         Rigidbody rb;
         bool isGrounded = true;
@@ -24,21 +24,22 @@ namespace Player
         {
             if (!isGrounded) return;
 
-            Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-            float horizontalSpeed = horizontalVelocity.magnitude;
+            if (direction.sqrMagnitude < 0.01f) return;
 
-            if (horizontalSpeed < maxSpeed)
-            {
-                Vector3 movementDirection = new Vector3(direction.x, 0f, direction.z);
-                Vector3 accelerationForce = movementDirection * acceleration;
+            Vector3 currentVelocity = rb.velocity;
 
-                rb.AddForce(accelerationForce, ForceMode.Force);
-            }
-            else
-            {
-                Vector3 limitedVelocity = horizontalVelocity.normalized * maxSpeed;
-                rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
-            }
+            Vector3 targetVelocity = direction.normalized * maxSpeed;
+
+            Vector3 currentXZ = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+            Vector3 targetXZ = new Vector3(targetVelocity.x, 0f, targetVelocity.z);
+
+            Vector3 newXZ = Vector3.MoveTowards(
+                currentXZ,
+                targetXZ,
+                accelerationRate * Time.fixedDeltaTime
+            );
+
+            rb.velocity = new Vector3(newXZ.x, currentVelocity.y, newXZ.z);
         }
 
         public void TryJump()

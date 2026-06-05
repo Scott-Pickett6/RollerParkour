@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PlatformData
   m_EditorClassIdentifier: 
   prefabProvider: {fileID: 11400000, guid: bda7ed1010b79114b89f14248f26c52b, type: 2}
-  zSpacing: 16
-  minXOffset: -15
-  maxXOffset: 15
+  zSpacing: 23
+  minXOffset: -16
+  maxXOffset: 16
+  despawnDistance: 16
