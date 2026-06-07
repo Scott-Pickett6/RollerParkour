@@ -11,23 +11,36 @@ namespace Player
         float accelerationRate;
         [SerializeField]
         float jumpForce;
+        [SerializeField] 
+        float groundCheckDistance;
         
         Rigidbody rb;
-        bool isGrounded = true;
+        SphereCollider sc;
 
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            sc = GetComponent<SphereCollider>();
+        }
+
+        bool IsGrounded()
+        {
+            float distance = sc.radius + groundCheckDistance;
+
+            return Physics.Raycast(
+                transform.position,
+                Vector3.down,
+                distance
+            );
         }
 
         public void Move(Vector3 direction)
         {
-            if (!isGrounded) return;
+            if (!IsGrounded()) return;
 
             if (direction.sqrMagnitude < 0.01f) return;
 
             Vector3 currentVelocity = rb.velocity;
-
             Vector3 targetVelocity = direction.normalized * maxSpeed;
 
             Vector3 currentXZ = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
@@ -44,37 +57,14 @@ namespace Player
 
         public void TryJump()
         {
-            if (!isGrounded) return;
+            if (!IsGrounded()) return;
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
         }
 
         public void DisablePhysics()
         {
             rb.isKinematic = true;
-        }
-
-        void OnCollisionStay(Collision collision)
-        {
-            if (!collision.gameObject.CompareTag("Platform")) return;
-
-            foreach (ContactPoint contact in collision.contacts)
-            {
-                if (contact.normal.y > 0.5f)
-                {
-                    isGrounded = true;
-                    return;
-                }
-            }
-        }
-
-        void OnCollisionExit(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Platform"))
-            {
-                isGrounded = false;
-            }
         }
     }
 }
