@@ -195,7 +195,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1658,7 +1658,7 @@ MonoBehaviour:
   maxSpeed: 9
   accelerationRate: 19
   jumpForce: 12
-  groundCheckDistance: 0.2
+  groundCheckDistance: 0.5
 --- !u!114 &1529766755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1988,6 +1988,7 @@ MonoBehaviour:
   initialPlatform: {fileID: 1503049239}
   spawnSystemDefinitions:
   - {fileID: 11400000, guid: ea0090603f817414f8526c63ea1aff34, type: 2}
+  - {fileID: 11400000, guid: a5c74df0c863de340983600ff9b5c955, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

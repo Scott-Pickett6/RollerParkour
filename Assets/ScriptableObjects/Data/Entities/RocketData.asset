@@ -16,8 +16,8 @@ MonoBehaviour:
   spawnInterval: 2
   intervalMultiplier: 0.9
   distanceIntervalForDifficultyIncrease: 20
-  horizontalDistance: 20
+  horizontalDistance: 30
   minSpawnHeight: 0.5
   maxSpawnHeight: 2.5
   minZOffset: -1
-  maxZOffset: 5
+  maxZOffset: 20

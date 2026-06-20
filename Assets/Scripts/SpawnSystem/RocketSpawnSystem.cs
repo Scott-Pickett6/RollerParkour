@@ -1,4 +1,5 @@
 ﻿using Game;
+using UnityEngine;
 
 namespace SpawnSystem
 {
@@ -8,7 +9,7 @@ namespace SpawnSystem
         EntityFactory<Rocket> factory;
         SpawnStrategy strategy;
         RocketData data;
-        bool spawningEnabled;
+        bool spawningEnabled = true;
         
         float currentRocketSpawnInterval;
         int maxDistanceTraveled;

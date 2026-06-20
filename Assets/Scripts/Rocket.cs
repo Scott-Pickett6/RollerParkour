@@ -51,7 +51,7 @@ public class Rocket : Entity
     
     void FixedUpdate()
     {
-        rb.MovePosition(transform.position + -transform.right * (speed * Time.fixedDeltaTime));
+        rb.velocity = -transform.right * speed;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -62,7 +62,7 @@ public class Rocket : Entity
         {
             player.HasSheild = false;
         }
-        else
+        else if(player != null)
         {
             // we don't like this
             GameManager.Instance.GameOver();

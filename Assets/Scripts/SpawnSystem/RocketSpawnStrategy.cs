@@ -33,9 +33,13 @@ namespace SpawnSystem
 
             float lowBias = Random.value * Random.value;
             float spawnHeight = Mathf.Lerp(minHeight, maxHeight, lowBias);
-
+            
             float xOffset = spawnOnLeftSide ? -horizontalDistance : horizontalDistance;
-            float zOffset = Random.Range(minZOffset, maxZOffset);
+            float zOffset = Mathf.Lerp(
+                minZOffset,
+                maxZOffset,
+                1f - (Random.value * Random.value * Random.value)
+            );
 
             Vector3 position = originTransform.position + new Vector3(xOffset, spawnHeight, zOffset);
             Quaternion rotation = Quaternion.Euler(0f, spawnOnLeftSide ? 180f : 0f, 0f);
