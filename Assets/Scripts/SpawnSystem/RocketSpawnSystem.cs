@@ -1,4 +1,5 @@
-﻿using Game;
+﻿using Entities;
+using Game;
 using UnityEngine;
 
 namespace SpawnSystem

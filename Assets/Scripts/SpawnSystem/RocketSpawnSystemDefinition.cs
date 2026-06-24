@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Entities;
+using UnityEngine;
 
 namespace SpawnSystem
 {
@@ -17,7 +18,7 @@ namespace SpawnSystem
                     rocketData.HorizontalDistance, 
                     rocketData.MinSpawnHeight, 
                     rocketData.MaxSpawnHeight, 
-                    rocketData.MinZOffset, 
+                    rocketData.MinZOffset,
                     rocketData.MaxZOffset));
         }
     }

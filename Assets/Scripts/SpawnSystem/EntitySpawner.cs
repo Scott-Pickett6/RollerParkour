@@ -1,4 +1,6 @@
-﻿namespace SpawnSystem
+﻿using Entities;
+
+namespace SpawnSystem
 {
     public class EntitySpawner<T> where T : Entity
     {

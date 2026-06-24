@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Entities;
+using UnityEngine;
 
 namespace SpawnSystem
 {
@@ -11,6 +12,7 @@ namespace SpawnSystem
         Platform currentPlatform;
         Platform nextPlatform;
         Transform playerTransform;
+        SpawnContext spawnContext;
         
         public PlatformSpawnSystem(PlatformData data, EntityFactory<Platform> factory, PlatformSpawnStrategy strategy, SpawnContext spawnContext)
         {
@@ -18,6 +20,7 @@ namespace SpawnSystem
             this.factory = factory;
             this.strategy = strategy;
             this.data = data;
+            this.spawnContext = spawnContext;
             currentPlatform = spawnContext.InitialPlatform;
             playerTransform = spawnContext.PlayerTransform;
         }
@@ -37,6 +40,7 @@ namespace SpawnSystem
 
             nextPlatform = entitySpawner.Spawn();
             nextPlatform.Init(data, playerTransform);
+            spawnContext.RaisePlatformSpawned(nextPlatform);
 
             if (nextPlatform != null)
             {

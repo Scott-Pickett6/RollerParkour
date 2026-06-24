@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e61ba1d26a54a7e80fdc1c9ca47cbb1, type: 3}
-  m_Name: RocketPrefabProvider
+  m_Script: {fileID: 11500000, guid: 8401f73491b34d5ea66cb302f51801a4, type: 3}
+  m_Name: PowerUpPrefabProvider
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3957533717641342524, guid: 96dc490da1d9cfb4081ad9d5a023ab42, type: 3}
+  prefabs:
+  - {fileID: 5381239183583933435, guid: 04368647e37f3184e864056915724318, type: 3}
+  - {fileID: 8415248498332601849, guid: 3c3db1c2fe5214341a2a18dba3c042d5, type: 3}

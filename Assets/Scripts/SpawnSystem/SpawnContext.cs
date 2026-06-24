@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Entities;
+using UnityEngine;
 
 namespace SpawnSystem
 {
@@ -6,5 +8,11 @@ namespace SpawnSystem
     {
         public Transform PlayerTransform { get; set; }
         public Platform InitialPlatform { get; set; }
+        public event Action<Platform> PlatformSpawned;
+        
+        public void RaisePlatformSpawned(Platform platform)
+        {
+            PlatformSpawned?.Invoke(platform);
+        }
     }
 }
