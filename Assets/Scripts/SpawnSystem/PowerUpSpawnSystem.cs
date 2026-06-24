@@ -1,4 +1,5 @@
 ﻿using Entities;
+using UnityEngine;
 
 namespace SpawnSystem
 {
@@ -8,9 +9,9 @@ namespace SpawnSystem
         SpawnContext spawnContext;
         PowerUpData data;
         EntityFactory<Platform> factory;
-        SpawnStrategy strategy;
+        PowerUpSpawnStrategy strategy;
 
-        public PowerUpSpawnSystem(PowerUpData data, EntityFactory<Platform> factory, SpawnStrategy strategy, SpawnContext spawnContext)
+        public PowerUpSpawnSystem(PowerUpData data, EntityFactory<Platform> factory, PowerUpSpawnStrategy strategy, SpawnContext spawnContext)
         {
             entitySpawner = new EntitySpawner<Platform>(factory, strategy, data);
             this.data = data;
@@ -20,17 +21,18 @@ namespace SpawnSystem
         }
         public void Init()
         {
-            spawnContext.PlatformSpawned += OnPlatformSpawned;
+            spawnContext.PlatformSpawned += SpawnPowerUp;
         }
 
         public void Dispose()
         {
-            spawnContext.PlatformSpawned -= OnPlatformSpawned;
+            spawnContext.PlatformSpawned -= SpawnPowerUp;
         }
 
-        void OnPlatformSpawned(Platform platform)
+        void SpawnPowerUp(Platform platform)
         {
-            throw new System.NotImplementedException();
+            strategy.SetNextPlatform(platform);
+            entitySpawner.Spawn();
         }
     }
 }

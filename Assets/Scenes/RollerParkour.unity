@@ -1989,6 +1989,7 @@ MonoBehaviour:
   spawnSystemDefinitions:
   - {fileID: 11400000, guid: ea0090603f817414f8526c63ea1aff34, type: 2}
   - {fileID: 11400000, guid: a5c74df0c863de340983600ff9b5c955, type: 2}
+  - {fileID: 11400000, guid: dab8002ab8be24d479e35624d37bb4c0, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

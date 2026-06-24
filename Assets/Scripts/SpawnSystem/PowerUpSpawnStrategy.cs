@@ -5,15 +5,25 @@ namespace SpawnSystem
 {
     public class PowerUpSpawnStrategy : SpawnStrategy
     {
-        SpawnContext spawnContext;
         Platform nextPlatform;
-        public PowerUpSpawnStrategy(SpawnContext spawnContext)
+        public PowerUpSpawnStrategy()
         {
-            this.spawnContext = spawnContext;
+            
         }
         public override SpawnPointData GetSpawnPointData()
         {
-            
+            // random power up location
+            Transform point = nextPlatform.Points[Random.Range(0, nextPlatform.Points.Length)].transform;
+            return new SpawnPointData(
+                point.position,
+                point.rotation
+                );
+        }
+
+        // always called before GetSpawnPointData
+        public void SetNextPlatform(Platform platform)
+        {
+            nextPlatform = platform;
         }
     }
 }

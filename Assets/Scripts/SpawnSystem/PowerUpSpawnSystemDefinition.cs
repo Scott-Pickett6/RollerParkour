@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace SpawnSystem
 {
+    [CreateAssetMenu(fileName = "PowerUpSpawnSystemDefinition", menuName = "SpawnSystem/PowerUpSpawnSystemDefinition")]
     public class PowerUpSpawnSystemDefinition : SpawnSystemDefinition
     {
         [SerializeField]
@@ -13,7 +14,7 @@ namespace SpawnSystem
             return new PowerUpSpawnSystem(
                 powerUpData,
                 new EntityFactoryImpl<Platform>(),
-                new PowerUpSpawnStrategy(context), // should need the powerUpData, also needs the context to get events
+                new PowerUpSpawnStrategy(),
                 context);
         }
     }

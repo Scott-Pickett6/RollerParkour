@@ -14,7 +14,7 @@ namespace Entities
         PlatformData data;
         Transform player;
     
-        private PowerUpSpawnPoint[] points;
+        public PowerUpSpawnPoint[] Points { get; private set; }
 
         public void Init(PlatformData data, Transform player)
         {
@@ -24,7 +24,7 @@ namespace Entities
 
         void Awake()
         {
-            points = GetComponentsInChildren<PowerUpSpawnPoint>();
+            Points = GetComponentsInChildren<PowerUpSpawnPoint>();
         }
 
         void Start()
