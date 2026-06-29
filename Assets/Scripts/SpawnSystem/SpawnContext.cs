@@ -12,7 +12,6 @@ namespace SpawnSystem
         
         public void RaisePlatformSpawned(Platform platform)
         {
-            Debug.Log("RaisePlatformSpawned");
             PlatformSpawned?.Invoke(platform);
         }
     }

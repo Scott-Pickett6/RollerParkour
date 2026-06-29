@@ -1,9 +1,10 @@
 ﻿using System;
 using Entities;
 using Player;
+using PowerUp;
 using UnityEngine;
 
-namespace PowerUp
+namespace Entities
 {
     public class PowerUpPickup : Entity
     {
@@ -21,6 +22,7 @@ namespace PowerUp
         {
             player.ApplyPowerUpEffect(powerUpEffect);
             Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 }

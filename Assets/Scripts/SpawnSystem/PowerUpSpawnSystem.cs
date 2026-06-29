@@ -21,12 +21,20 @@ namespace SpawnSystem
         }
         public void Init()
         {
-            spawnContext.PlatformSpawned += SpawnPowerUp;
+            spawnContext.PlatformSpawned += OnPlatformSpawned;
         }
 
         public void Dispose()
         {
-            spawnContext.PlatformSpawned -= SpawnPowerUp;
+            spawnContext.PlatformSpawned -= OnPlatformSpawned;
+        }
+
+        void OnPlatformSpawned(Platform platform)
+        {
+            if (Random.value < data.SpawnProbability)
+            {
+                SpawnPowerUp(platform);
+            }
         }
 
         void SpawnPowerUp(Platform platform)

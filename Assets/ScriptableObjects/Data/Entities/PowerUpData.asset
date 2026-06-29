@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: PowerUpData
   m_EditorClassIdentifier: 
   prefabProvider: {fileID: 11400000, guid: 3ade3d4bb06dcca41a8d6c02ad8cc198, type: 2}
+  spawnProbability: 0.2
