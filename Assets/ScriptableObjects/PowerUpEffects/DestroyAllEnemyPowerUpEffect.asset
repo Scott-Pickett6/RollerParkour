@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685fb4550aef491f964a070250eabc04, type: 3}
   m_Name: DestroyAllEnemyPowerUpEffect
   m_EditorClassIdentifier: 
+  destroyAllEnemiesEventChannel: {fileID: 11400000, guid: c76059184d92a424bb2c1aba77e33394, type: 2}

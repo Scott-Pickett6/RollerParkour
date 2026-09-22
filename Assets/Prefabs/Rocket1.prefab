@@ -73,6 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571548f873e99b546a4a644861e48a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyAllEnemiesEventChannel: {fileID: 11400000, guid: c76059184d92a424bb2c1aba77e33394, type: 2}
   speed: 8
   explosionEffectPrefab: {fileID: 1620140131458704099, guid: 57e5b83dfee152a47aedf7d83c83e9f5, type: 3}
   destroyDistance: 75

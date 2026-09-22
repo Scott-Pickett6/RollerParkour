@@ -12,17 +12,12 @@ namespace Game
         public event Action<int> OnDistanceChanged;
         public event Action<string> OnTimerUpdated;
         public event Action<long> OnGameOver;
-
-        public event Action<int> OnPowerUpTimerUpdated;
-        public event Action<bool> OnPowerUpStatusChanged;
     
         public event Action<GameState> OnGameStateChanged;
 
         private float elapsedTime;
         private int distanceTraveled;
         private bool isTimerRunning;
-        private bool hasPowerUp;
-        private float powerUpDuration;
 
         private void Awake()
         {
@@ -54,21 +49,6 @@ namespace Game
                 int seconds = Mathf.RoundToInt(elapsedTime);
                 OnTimerUpdated?.Invoke(FormatTime(seconds));
             }
-            if (hasPowerUp)
-            {
-                powerUpDuration -= Time.deltaTime;
-                if (powerUpDuration <= 0f)
-                {
-                    hasPowerUp = false;
-                    powerUpDuration = 0f;
-                    OnPowerUpStatusChanged?.Invoke(false);
-                    OnPowerUpTimerUpdated?.Invoke(0);
-                }
-                else
-                {
-                    OnPowerUpTimerUpdated?.Invoke(Mathf.RoundToInt(powerUpDuration));
-                }
-            }
         }
 
         private void StartTimer()
@@ -90,7 +70,6 @@ namespace Game
 
             isTimerRunning = false;
             int score = GameScoreManager.Instance.CalculateScore(distanceTraveled, elapsedTime);
-            hasPowerUp = false;
             GameScoreManager.Instance.SaveBestScore(score);
             OnGameOver?.Invoke(score);
             OnGameStateChanged?.Invoke(GameState.GameOver);
@@ -102,8 +81,6 @@ namespace Game
             isTimerRunning = false;
             elapsedTime = 0f;
             distanceTraveled = 0;
-            powerUpDuration = 0f;
-            hasPowerUp = false;
             Time.timeScale = 1f;
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -114,18 +91,9 @@ namespace Game
             OnGameStateChanged?.Invoke(GameState.Starting);
             isTimerRunning = false;
             elapsedTime = 0f;
-            hasPowerUp= false;
-            powerUpDuration = 0f;
             distanceTraveled = 0;
             Time.timeScale = 1f;
             SceneManager.LoadScene("MainMenu");
-        }
-
-        public void HitPowerUp()
-        {
-            hasPowerUp = true;
-            powerUpDuration += 20f;
-            OnPowerUpStatusChanged?.Invoke(true);
         }
 
         private string FormatTime(int seconds)

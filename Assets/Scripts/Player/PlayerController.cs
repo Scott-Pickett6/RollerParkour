@@ -8,20 +8,22 @@ namespace Player
     [RequireComponent(typeof(IInput))]
     [RequireComponent(typeof(IMovement))]
     [RequireComponent(typeof(IOffMapDetector))]
+    [RequireComponent(typeof(PlayerPowerUpManager))]
     public class PlayerController : Entity
     {
         IInput playerInput;
         IMovement playerMovement;
         IOffMapDetector playerFallDetector;
+        PlayerPowerUpManager playerPowerUpManager;
 
         bool jumpRequested;
-        public bool HasSheild { get; set; } = false;
         
         void Awake()
         {
             playerInput = GetComponent<IInput>();
             playerMovement = GetComponent<IMovement>();
             playerFallDetector = GetComponent<IOffMapDetector>();
+            playerPowerUpManager = GetComponent<PlayerPowerUpManager>();
         }
 
         void OnEnable()
@@ -67,12 +69,7 @@ namespace Player
         
         public void ApplyPowerUpEffect(PowerUpEffect powerUpEffect)
         {
-            powerUpEffect.ApplyPowerUp(gameObject);
-
-            if (powerUpEffect is TimedPowerUpEffect timedPowerUpEffect)
-            {
-                StartCoroutine(timedPowerUpEffect.StartTimedPowerUp(gameObject));
-            }
+            playerPowerUpManager.ApplyPowerUp(powerUpEffect);
         }
     }
 }

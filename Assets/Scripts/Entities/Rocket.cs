@@ -1,3 +1,5 @@
+using System;
+using Events;
 using Game;
 using Player;
 using PowerUp;
@@ -7,7 +9,9 @@ namespace Entities
 {
     public class Rocket : Entity
     {
-
+        [SerializeField]
+        DestroyAllEnemiesEventChannel destroyAllEnemiesEventChannel;
+        
         [SerializeField]
         float speed;
         [SerializeField]
@@ -30,12 +34,12 @@ namespace Entities
 
         void OnEnable()
         {
-            DestroyAllEnemyPowerUpEffect.OnDestroyAllEnemies += Destroy;
+            destroyAllEnemiesEventChannel.OnEventRaised += HandleDestroyAllEnemiesEvent;
         }
-
-        void OnDisable()
+        
+         void OnDisable()
         {
-            DestroyAllEnemyPowerUpEffect.OnDestroyAllEnemies -= Destroy;
+            destroyAllEnemiesEventChannel.OnEventRaised -= HandleDestroyAllEnemiesEvent;
         }
 
         void Update()
@@ -57,19 +61,19 @@ namespace Entities
 
         void OnCollisionEnter(Collision collision)
         {
-            // better solution would be to handle the shield logic in the player script
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-            if (player != null && player.HasSheild)
+            PlayerPowerUpManager powerUpManager = collision.gameObject.GetComponent<PlayerPowerUpManager>();
+            if (powerUpManager != null && !powerUpManager.ConsumedSheild())
             {
-                player.HasSheild = false;
-            }
-            else if(player != null)
-            {
-                // we don't like this
                 GameManager.Instance.GameOver();
             }
             TriggerExplosion();
             Destroy(gameObject);
+        }
+
+        void HandleDestroyAllEnemiesEvent()
+        {
+            TriggerExplosion();
+            Destroy();
         }
 
         void TriggerExplosion()

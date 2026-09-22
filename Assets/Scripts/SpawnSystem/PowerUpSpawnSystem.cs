@@ -5,15 +5,15 @@ namespace SpawnSystem
 {
     public class PowerUpSpawnSystem : ISpawnSystem
     {
-        EntitySpawner<Platform> entitySpawner;
+        EntitySpawner<PowerUpPickup> entitySpawner;
         SpawnContext spawnContext;
         PowerUpData data;
-        EntityFactory<Platform> factory;
+        EntityFactory<PowerUpPickup> factory;
         PowerUpSpawnStrategy strategy;
 
-        public PowerUpSpawnSystem(PowerUpData data, EntityFactory<Platform> factory, PowerUpSpawnStrategy strategy, SpawnContext spawnContext)
+        public PowerUpSpawnSystem(PowerUpData data, EntityFactory<PowerUpPickup> factory, PowerUpSpawnStrategy strategy, SpawnContext spawnContext)
         {
-            entitySpawner = new EntitySpawner<Platform>(factory, strategy, data);
+            entitySpawner = new EntitySpawner<PowerUpPickup>(factory, strategy, data);
             this.data = data;
             this.factory = factory;
             this.strategy = strategy;

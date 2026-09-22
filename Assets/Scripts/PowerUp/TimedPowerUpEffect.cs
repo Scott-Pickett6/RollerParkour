@@ -9,12 +9,8 @@ namespace PowerUp
         [SerializeField] 
         float duration = 20;
         
+        public float Duration => duration;
+        
         public abstract void RemovePowerUp(GameObject target);
-
-        public IEnumerator StartTimedPowerUp(GameObject target)
-        {
-            yield return new WaitForSeconds(duration);
-            RemovePowerUp(target);
-        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Events;
 using UnityEngine;
 
 namespace PowerUp
@@ -6,10 +6,11 @@ namespace PowerUp
     [CreateAssetMenu(fileName = "DestroyAllEnemyPowerUpEffect", menuName = "PowerUp Effects/SingleTimePowerUpEffects/DestroyAllEnemyPowerUpEffect")]
     public class DestroyAllEnemyPowerUpEffect : SingleTimePowerUpEffect
     {
-        public static event Action OnDestroyAllEnemies;
+        [SerializeField]
+        DestroyAllEnemiesEventChannel destroyAllEnemiesEventChannel;
         public override void ApplyPowerUp(GameObject target)
         {
-            OnDestroyAllEnemies?.Invoke();
+            destroyAllEnemiesEventChannel.RaiseEvent();
         }
     }
 }

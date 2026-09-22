@@ -13,7 +13,7 @@ namespace SpawnSystem
         {
             return new PowerUpSpawnSystem(
                 powerUpData,
-                new EntityFactoryImpl<Platform>(),
+                new EntityFactoryImpl<PowerUpPickup>(),
                 new PowerUpSpawnStrategy(),
                 context);
         }

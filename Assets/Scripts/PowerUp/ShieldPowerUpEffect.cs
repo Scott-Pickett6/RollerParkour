@@ -8,20 +8,12 @@ namespace PowerUp
     {
         public override void ApplyPowerUp(GameObject target)
         {
-            PlayerController playerController = target.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.HasSheild = true;
-            }
+            target.GetComponent<PlayerPowerUpManager>().HasSheild = true;
         }
 
         public override void RemovePowerUp(GameObject target)
         {
-            PlayerController playerController = target.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.HasSheild = false;
-            }
+            target.GetComponent<PlayerPowerUpManager>().HasSheild = false;
         }
     }
 }

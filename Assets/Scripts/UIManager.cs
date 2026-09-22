@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
+using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +26,10 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Button mainMenuButton;
+    
+    [SerializeField]
+    private PlayerPowerUpManager playerPowerUpManager;
+    private int lastDisplayedPowerUpSec = -1;
 
     private void Start()
     {
@@ -32,7 +38,6 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.OnDistanceChanged += UpdateDistance;
             GameManager.Instance.OnTimerUpdated += UpdateTimer;
             GameManager.Instance.OnGameOver += HandleGameOver;
-            GameManager.Instance.OnPowerUpTimerUpdated += UpdatePowerUpTimer;
         }
     }
 
@@ -43,8 +48,12 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.OnDistanceChanged -= UpdateDistance;
             GameManager.Instance.OnTimerUpdated -= UpdateTimer;
             GameManager.Instance.OnGameOver -= HandleGameOver;
-            GameManager.Instance.OnPowerUpTimerUpdated -= UpdatePowerUpTimer;
         }
+    }
+
+    private void Update()
+    {
+        UpdatePowerUpDisplay();
     }
 
     private void UpdateTimer(string time)
@@ -65,8 +74,17 @@ public class UIManager : MonoBehaviour
         mainMenuButton.gameObject.SetActive(true);
     }
 
-    private void UpdatePowerUpTimer(int secondsLeft)
+    private void UpdatePowerUpDisplay()
     {
-       powerUpTimer.text = "Power Up Time: " + secondsLeft;
+        if (playerPowerUpManager.ActiveTimedPowerUp == null || playerPowerUpManager.ActiveTimedPowerUp.IsExpired)
+        {
+            lastDisplayedPowerUpSec = -1;
+            powerUpTimer.text = "";
+            return;
+        }
+        int secondsLeft = Mathf.CeilToInt(playerPowerUpManager.ActiveTimedPowerUp.RemainingTime);
+        if (secondsLeft == lastDisplayedPowerUpSec) return;
+        lastDisplayedPowerUpSec = secondsLeft;
+        powerUpTimer.text = "Power Up: " + secondsLeft;
     }
 }
