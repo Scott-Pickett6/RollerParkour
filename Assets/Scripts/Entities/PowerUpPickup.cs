@@ -1,6 +1,4 @@
-﻿using System;
-using Entities;
-using Player;
+﻿using Player;
 using PowerUp;
 using UnityEngine;
 

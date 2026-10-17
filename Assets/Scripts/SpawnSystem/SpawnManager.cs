@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Entities;
 using Game;
+using Interfaces;
 using UnityEngine;
 
 namespace SpawnSystem

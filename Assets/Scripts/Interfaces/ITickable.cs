@@ -1,4 +1,4 @@
-﻿namespace SpawnSystem
+﻿namespace Interfaces
 {
     public interface ITickable
     {

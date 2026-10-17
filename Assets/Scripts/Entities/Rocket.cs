@@ -1,8 +1,6 @@
-using System;
 using Events;
 using Game;
 using Player;
-using PowerUp;
 using UnityEngine;
 
 namespace Entities
@@ -75,7 +73,7 @@ namespace Entities
             TriggerExplosion();
             Destroy();
         }
-
+        
         void TriggerExplosion()
         {
             if (explosionEffectPrefab != null)

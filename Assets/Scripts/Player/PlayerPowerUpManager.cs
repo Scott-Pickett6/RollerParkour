@@ -23,7 +23,7 @@ namespace Player
             if (!HasSheild) return false;
             
             HasSheild = false;
-            if (ActiveTimedPowerUp != null && ActiveTimedPowerUp.TimedPowerUpEffect is ShieldPowerUpEffect shieldPowerUpEffect)
+            if (ActiveTimedPowerUp != null && ActiveTimedPowerUp.TimedPowerUpEffect is ShieldPowerUpEffect)
             {
                 ActiveTimedPowerUp = null;
                 return true;

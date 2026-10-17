@@ -1,5 +1,4 @@
-﻿using SpawnSystem;
-using UnityEngine;
+﻿using Interfaces;
 
 namespace PowerUp
 {

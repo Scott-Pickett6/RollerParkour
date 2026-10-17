@@ -10,11 +10,11 @@ namespace Player
         public bool JumpInput { get; private set; }
         
         // returns new vector3 everytime get is called
-        public Vector3 MovementInput => new Vector3(SideInput, 0, ForwardInput);
+        public Vector3 MovementInput => new(SideInput, 0, ForwardInput);
         
         public static event Action OnFirstMove;
         
-        bool hasMoved = false;
+        bool hasMoved;
 
         void Update()
         {
