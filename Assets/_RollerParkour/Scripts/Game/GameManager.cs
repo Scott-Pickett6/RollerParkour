@@ -74,6 +74,27 @@ namespace Game
             OnGameOver?.Invoke(score);
             OnGameStateChanged?.Invoke(GameState.GameOver);
         }
+        
+        public void RestartGame()
+        {
+            OnGameStateChanged?.Invoke(GameState.Starting);
+            isTimerRunning = false;
+            elapsedTime = 0f;
+            distanceTraveled = 0;
+            Time.timeScale = 1f;
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void LoadMainMenu()
+        {
+            OnGameStateChanged?.Invoke(GameState.Starting);
+            isTimerRunning = false;
+            elapsedTime = 0f;
+            distanceTraveled = 0;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("MainMenu");
+        }
 
         private string FormatTime(int seconds)
         {

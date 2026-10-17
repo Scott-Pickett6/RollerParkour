@@ -86,5 +86,20 @@ namespace UI
             lastDisplayedPowerUpSec = secondsLeft;
             powerUpTimer.text = "Power Up: " + secondsLeft;
         }
+        
+        public void ClickRestart()
+        {
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.RestartGame();
+            }
+        }
+        public void ClickMainMenu()
+        {
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.LoadMainMenu();
+            }
+        }
     }
 }
