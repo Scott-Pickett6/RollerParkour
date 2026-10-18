@@ -2,7 +2,7 @@ using Game;
 using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace _RollerParkour.Scripts.UI
 {
     public class MainMenuManager : MonoBehaviour
     {

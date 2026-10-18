@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace _RollerParkour.Scripts.UI
 {
     public class UIManager : MonoBehaviour
     {
